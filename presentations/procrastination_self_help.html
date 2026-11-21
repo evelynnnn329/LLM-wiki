@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>為什麼我們總是拖到最後一刻？——拖延心理學與科學自救指南</title>
+  <style>
+    :root {
+      --bg-color: #fbf7ee;
+      --bg-pattern: #ebdcc4;
+      --ink-color: #2d3748;
+      --ink-muted: #64748b;
+      --paper-white: #ffffff;
+      
+      /* Cute Pastel Palette */
+      --pastel-yellow: #fff9db;
+      --pastel-yellow-border: #f59f00;
+      --pastel-blue: #e7f5ff;
+      --pastel-blue-border: #339af0;
+      --pastel-pink: #fff0f3;
+      --pastel-pink-border: #f06595;
+      --pastel-green: #ebfbee;
+      --pastel-green-border: #40c057;
+      --pastel-purple: #f3f0ff;
+      --pastel-purple-border: #845ef7;
+
+      --accent-color: #ffd43b;
+      --accent-btn: #ff6b6b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: ui-rounded, "Comic Sans MS", "Chalkboard SE", "Yuanti TC", "圓體-繁", "PingFang SC", "Microsoft JhengHei", cursive, sans-serif;
+      background-color: var(--bg-color);
+      background-image: radial-gradient(var(--bg-pattern) 1.5px, transparent 1.5px);
+      background-size: 20px 20px;
+      color: var(--ink-color);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Header & Progress Bar */
+    header {
+      padding: 0.65rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 2.2px solid var(--ink-color);
+      box-shadow: 0 2px 0px rgba(45, 55, 72, 0.08);
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--ink-color);
+    }
+
+    .brand-icon {
+      font-size: 1.25rem;
+      display: inline-block;
+      animation: wiggle 2s infinite ease-in-out;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-8deg); }
+      75% { transform: rotate(8deg); }
+    }
+
+    .brand-badge {
+      background: var(--pastel-yellow);
+      border: 1.8px solid var(--ink-color);
+      padding: 0.1rem 0.55rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      box-shadow: 1.5px 1.5px 0px var(--ink-color);
+    }
+
+    .slide-progress-container {
+      flex: 1;
+      max-width: 260px;
+      margin: 0 1.2rem;
+      background: #ffffff;
+      height: 10px;
+      border: 1.8px solid var(--ink-color);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 1.5px 1.5px 0px rgba(45, 55, 72, 0.12);
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      background: repeating-linear-gradient(
+        45deg,
+        #ffd43b,
+        #ffd43b 8px,
+        #ff922b 8px,
+        #ff922b 16px
+      );
+      width: 0%;
+      transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .slide-counter {
+      font-family: monospace;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--ink-color);
+      background: #ffffff;
+      padding: 0.2rem 0.65rem;
+      border-radius: 10px;
+      border: 1.8px solid var(--ink-color);
+      box-shadow: 1.5px 1.5px 0px var(--ink-color);
+    }
+
+    /* Main Container optimized for 16:9 */
+    main {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1.5rem;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .slide {
+      position: absolute;
+      width: 94%;
+      max-width: 1040px;
+      max-height: calc(100% - 0.5rem);
+      overflow-y: auto;
+      padding: 0.4rem 0.8rem 0.8rem 0.4rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px) scale(0.99);
+      transition: all 0.25s cubic-bezier(0.34, 1.25, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      box-sizing: border-box;
+    }
+
+    .slide::-webkit-scrollbar {
+      width: 6px;
+    }
+    .slide::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border: 1.5px solid var(--ink-color);
+      border-radius: 8px;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Cute Typography & Stickers */
+    .slide-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #1e293b;
+      background: #ffffff;
+      border: 1.8px solid var(--ink-color);
+      padding: 0.15rem 0.65rem;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      box-shadow: 1.5px 1.5px 0px var(--ink-color);
+      align-self: flex-start;
+    }
+
+    .slide-title {
+      font-size: 1.85rem;
+      font-weight: 900;
+      line-height: 1.22;
+      color: #0f172a;
+      letter-spacing: -0.4px;
+      text-shadow: 2px 2px 0px rgba(255, 212, 59, 0.45);
+    }
+
+    .slide-subtitle {
+      font-size: 0.95rem;
+      color: #475569;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    /* Hand-drawn Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+    }
+
+    .card {
+      background: var(--paper-white);
+      border: 2px solid var(--ink-color);
+      border-radius: 16px;
+      box-shadow: 3.5px 3.5px 0px var(--ink-color);
+      padding: 0.95rem 1.1rem;
+      position: relative;
+      transition: all 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translate(-1.5px, -1.5px);
+      box-shadow: 5px 5px 0px var(--ink-color);
+    }
+
+    .washi-tape {
+      position: absolute;
+      top: -9px;
+      left: 20px;
+      width: 65px;
+      height: 18px;
+      background: rgba(255, 212, 59, 0.7);
+      border: 1px dashed rgba(45, 55, 72, 0.3);
+      transform: rotate(-3deg);
+      opacity: 0.85;
+    }
+
+    .card-accent-blue {
+      background: var(--pastel-blue);
+    }
+
+    .card-accent-rose {
+      background: var(--pastel-pink);
+    }
+
+    .card-accent-amber {
+      background: var(--pastel-yellow);
+    }
+
+    .card-accent-green {
+      background: var(--pastel-green);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #0f172a;
+    }
+
+    .card-text {
+      font-size: 0.88rem;
+      color: #334155;
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    .highlight-stat {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #e11d48;
+      margin-bottom: 0.1rem;
+      font-family: monospace;
+      letter-spacing: -0.5px;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: #475569;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    /* Hand-drawn Source Tag */
+    .source-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #f1f5f9;
+      border: 1.5px dashed #64748b;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      color: #475569;
+      font-weight: 600;
+      align-self: flex-start;
+    }
+
+    /* Handcrafted Comparison Table */
+    .table-container {
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid var(--ink-color);
+      background: #ffffff;
+      box-shadow: 3.5px 3.5px 0px var(--ink-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.86rem;
+    }
+
+    th, td {
+      padding: 0.65rem 0.95rem;
+      border-bottom: 1.5px solid #e2e8f0;
+      line-height: 1.45;
+    }
+
+    th {
+      background: var(--pastel-yellow);
+      color: #0f172a;
+      font-weight: 800;
+      border-bottom: 2px solid var(--ink-color);
+    }
+
+    /* Interactive Scenario Box */
+    .scenario-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.15rem;
+    }
+
+    .scenario-btn {
+      background: #ffffff;
+      border: 2px solid var(--ink-color);
+      color: var(--ink-color);
+      padding: 0.6rem 1.05rem;
+      border-radius: 12px;
+      box-shadow: 2px 2px 0px var(--ink-color);
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.86rem;
+      font-weight: 700;
+      font-family: inherit;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .scenario-btn:hover {
+      background: var(--pastel-yellow);
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--ink-color);
+    }
+
+    .scenario-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0px var(--ink-color);
+    }
+
+    .scenario-btn.active {
+      background: var(--pastel-yellow);
+      border-color: #f59f00;
+      box-shadow: 2.5px 2.5px 0px #f59f00;
+    }
+
+    .scenario-feedback {
+      margin-top: 0.4rem;
+      padding: 0.75rem 1.05rem;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 2px solid var(--pastel-blue-border);
+      box-shadow: 2.5px 2.5px 0px var(--pastel-blue-border);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    /* Handcrafted Cycle Loop with connecting arrows */
+    .cycle-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .cycle-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+    }
+
+    .cycle-step {
+      background: #ffffff;
+      border: 2px solid var(--ink-color);
+      border-radius: 14px;
+      box-shadow: 3px 3px 0px var(--ink-color);
+      padding: 0.75rem 0.65rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .cycle-arrow {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #f59f00;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .cycle-num {
+      width: 26px;
+      height: 26px;
+      background: var(--accent-color);
+      color: #0f172a;
+      border: 1.8px solid var(--ink-color);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.8rem;
+      margin-bottom: 0.3rem;
+      box-shadow: 1.5px 1.5px 0px var(--ink-color);
+    }
+
+    .cycle-loop-back {
+      background: var(--pastel-yellow);
+      border: 1.8px dashed var(--pastel-yellow-border);
+      border-radius: 10px;
+      padding: 0.4rem 0.8rem;
+      text-align: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #b45309;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    /* SVG Curve Diagram Box */
+    .svg-chart-card {
+      background: #ffffff;
+      border: 2px solid var(--ink-color);
+      border-radius: 16px;
+      box-shadow: 3.5px 3.5px 0px var(--ink-color);
+      padding: 0.75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .chart-caption {
+      font-size: 0.74rem;
+      color: #d97706;
+      text-align: right;
+      width: 100%;
+      margin-top: 0.3rem;
+      font-weight: 700;
+    }
+
+    /* Footer Navigation */
+    footer {
+      padding: 0.65rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border-top: 2.2px solid var(--ink-color);
+      box-shadow: 0 -2px 0px rgba(45, 55, 72, 0.06);
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .nav-btn-group {
+      display: flex;
+      gap: 0.65rem;
+    }
+
+    .btn {
+      background: #ffffff;
+      color: var(--ink-color);
+      border: 2px solid var(--ink-color);
+      padding: 0.45rem 1.15rem;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.88rem;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 2.5px 2.5px 0px var(--ink-color);
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--pastel-yellow);
+      transform: translate(-1px, -1px);
+      box-shadow: 3.5px 3.5px 0px var(--ink-color);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translate(1.5px, 1.5px);
+      box-shadow: 1px 1px 0px var(--ink-color);
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      color: #0f172a;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #fcc419;
+    }
+
+    .keyboard-hint {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .kbd {
+      background: #ffffff;
+      border: 1.5px solid var(--ink-color);
+      border-radius: 5px;
+      padding: 0.1rem 0.4rem;
+      font-family: monospace;
+      font-size: 0.72rem;
+      box-shadow: 1px 1px 0px var(--ink-color);
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div class="brand">
+      <span class="brand-icon">🧸</span>
+      <span>拖延症自救研究所</span>
+      <span class="brand-badge">手繪心理學課堂 ✏️</span>
+    </div>
+    <div class="slide-progress-container">
+      <div class="slide-progress-bar" id="progressBar"></div>
+    </div>
+    <div class="slide-counter" id="slideCounter">Slide 1 / 11</div>
+  </header>
+
+  <!-- Slide Canvas -->
+  <main>
+
+    <!-- Slide 1: Cover -->
+    <section class="slide active" data-index="1">
+      <span class="slide-category">🌱 大專生專屬心理學筆記</span>
+      <h1 class="slide-title">為什麼我們總是拖到最後一刻？</h1>
+      <p class="slide-subtitle">看懂大腦的逃避套路，用溫柔又科學的方法找回生活主導權 🎨</p>
+      
+      <div class="grid-3" style="margin-top: 0.3rem;">
+        <div class="card card-accent-amber">
+          <div class="washi-tape"></div>
+          <div class="card-title">💡 撕下道德標籤</div>
+          <p class="card-text">拖延絕不是因為你「懶惰」或「比別人差」。心理學研究帶你看懂大腦天生的認知拉扯。</p>
+        </div>
+        <div class="card card-accent-rose">
+          <div class="washi-tape" style="background: rgba(240, 101, 149, 0.4); transform: rotate(2deg);"></div>
+          <div class="card-title">🧩 解密大腦套路</div>
+          <p class="card-text">為什麼明知道期末很重要，眼前卻忍不住一直滑手機？看清時間距離與當下情緒如何悄悄綁架你的決定。</p>
+        </div>
+        <div class="card card-accent-green">
+          <div class="washi-tape" style="background: rgba(64, 192, 87, 0.4); transform: rotate(-1deg);"></div>
+          <div class="card-title">🛠️ 實用自救指南</div>
+          <p class="card-text">不只教你排計畫！從「減輕任務痛苦感、整理周遭環境、學會自我同情」打造不費力的前進小步調。</p>
+        </div>
+      </div>
+      <div class="source-tag">📚 依據 Wiki 知識庫：整合 Steel (2007)、Sirois & Pychyl (2013) 等五篇相關研究文獻</div>
+    </section>
+
+    <!-- Slide 2: Prevalence & Definition Nuances -->
+    <section class="slide" data-index="2">
+      <span class="slide-category">🏫 校園共鳴與真實數據</span>
+      <h2 class="slide-title">你並不孤單：大學生中的拖延現象</h2>
+      <p class="slide-subtitle">在高度自主排程的大學生活中，拖延是許多同學共同經歷的內心拔河。</p>
+      
+      <div class="grid-3">
+        <div class="card card-accent-blue">
+          <div class="highlight-stat">80% ~ 95%</div>
+          <div class="stat-label">曾有拖延行為（Engage in procrastination）的學生比例</div>
+          <p class="card-text" style="margin-top: 0.35rem;">絕大多數大專生都曾在寫報告或準備考試時有過推遲動筆的經驗（Ellis & Knaus, 1977; O’Brien, 2002）。</p>
+        </div>
+        <div class="card card-accent-amber">
+          <div class="highlight-stat">約 75%</div>
+          <div class="stat-label">自認屬於拖延者（Consider themselves procrastinators）</div>
+          <p class="card-text" style="margin-top: 0.35rem;">調查顯示超過七成的學生在主觀認同上會把自己歸類為常態拖延者（Potts, 1987）。</p>
+        </div>
+        <div class="card card-accent-rose">
+          <div class="highlight-stat">近 50%</div>
+          <div class="stat-label">長期且受其困擾（Consistently & problematically）</div>
+          <p class="card-text" style="margin-top: 0.35rem;">約半數學生回報拖延已形成長期模式，並伴隨實質的焦慮與進度壓力（Day et al., 2000; Solomon & Rothblum, 1984）。</p>
+        </div>
+      </div>
+
+      <div class="card" style="background: var(--pastel-yellow); padding: 0.8rem 1.1rem;">
+        <p class="card-text" style="font-weight: 600;">
+          💬 <strong>校園日常速寫</strong>：考前突然瘋狂打掃房間、信誓旦旦「明早六點起來讀」卻一路睡到中午……這些生活案例並非你個人的品行問題，而是大腦在特定情境下的典型反應。
+        </p>
+      </div>
+      <div class="source-tag">📚 文獻來源：Steel (2007) 引述之經典校園調查 (Ellis & Knaus, 1977; Potts, 1987)</div>
+    </section>
+
+    <!-- Slide 3: Procrastination vs. Strategic Delay -->
+    <section class="slide" data-index="3">
+      <span class="slide-category">🔍 概念澄清小黑板</span>
+      <h2 class="slide-title">延後動手，就一定是拖延嗎？</h2>
+      <p class="slide-subtitle">區分「非理性延遲」與「策略性順延」，放下無謂的自責內耗。</p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 25%;">比較面向</th>
+              <th style="width: 38%;">非理性延遲（拖延, Procrastination）</th>
+              <th style="width: 37%;">策略性順延（Strategic Delay）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>動機與預期</strong></td>
+              <td>自願推遲原定事項，<strong>預期延遲可能使情況變得更糟</strong>。</td>
+              <td>因任務優先順序調整、等待關鍵資訊或資源而主動推遲。</td>
+            </tr>
+            <tr>
+              <td><strong>執行特徵</strong></td>
+              <td>出現明顯的<strong>「意圖與行動落差」</strong>（心裡想做卻遲遲沒動）。</td>
+              <td>屬於有目的的彈性調配，符合整體目標的最佳利益。</td>
+            </tr>
+            <tr>
+              <td><strong>心理感受</strong></td>
+              <td>推遲過程中常伴隨焦慮、內疚與自我批評。</td>
+              <td>內心較為篤定，清楚下一步行動的時間點與計畫。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card card-accent-blue" style="padding: 0.8rem 1.1rem;">
+        <p class="card-text">
+          📌 <strong>核心定義（Steel, 2007）</strong>：拖延的關鍵在於其「非理性與不適應性」——我們清楚知道推遲下去成本更高，卻依然放任自己停步。若你是因為要蒐集更多資料或先處理更緊急的考試而順延，這屬於合理的安排，不需扣上拖延的帽子。
+        </p>
+      </div>
+      <div class="source-tag">📚 理論依據：非理性延遲概念 (Irrational Delay)；Steel (2007)</div>
+    </section>
+
+    <!-- Slide 4: Nuanced Explanation of Traits -->
+    <section class="slide" data-index="4">
+      <span class="slide-category">📊 實證大數據拆解</span>
+      <h2 class="slide-title">完美主義與焦慮，是拖延的主因嗎？</h2>
+      <p class="slide-subtitle">檢視 691 個效應值的 Meta-Analysis：釐清相關強度，不把相關誤當因果。</p>
+
+      <div class="grid-2">
+        <div class="card card-accent-amber">
+          <div class="card-title">🔍 完美主義（Perfectionism）的真實關聯</div>
+          <div class="highlight-stat">ρ = -0.04 (總體)</div>
+          <p class="card-text">
+            • <strong>總體關聯極微弱</strong>：統計顯示兩者近乎無關，多數拖延者並非因標準過高而不敢動筆。<br>
+            • <strong>細微面向仍有差異</strong>：研究發現「他人期望型完美主義」（在意外部要求）仍有微弱關聯（r = .18）；且部分完美主義者可能在「收尾與繳交」時因反覆斟酌而延誤（Steel, 2007 註釋8）。
+          </p>
+        </div>
+
+        <div class="card card-accent-rose">
+          <div class="card-title">🔍 焦慮與神經質（Neuroticism）</div>
+          <div class="highlight-stat">ρ = 0.28 (弱至中度相關)</div>
+          <p class="card-text">
+            • <strong>相關不等於直接因果</strong>：神經質與自陳拖延有弱正相關，但進一步研究顯示，此關聯多半是由「衝動性」特質所中介。<br>
+            • 焦慮者有時反而會因為極度害怕後果而提前趕工，焦慮對拖延的影響視情境而定，並非單向必然原因。
+          </p>
+        </div>
+      </div>
+
+      <div class="card card-accent-green" style="padding: 0.75rem 1.1rem;">
+        <div class="card-title">🎯 與拖延最強且穩定的特質相關</div>
+        <p class="card-text">
+          統合分析顯示，與拖延關聯最強的人格特質向度是<strong>盡責性（Conscientiousness, ρ = -0.75）</strong>與<strong>自我控制（ρ = -0.73）</strong>呈強烈負相關；<strong>衝動性（Impulsiveness, ρ = 0.52）</strong>與<strong>任務厭惡感（ρ = 0.44）</strong>則呈顯著正相關。
+        </p>
+      </div>
+      <div class="source-tag">📚 實證數據：Steel (2007) Psychological Bulletin 統合分析 (表2–表5)</div>
+    </section>
+
+    <!-- Slide 5: TMT Curve Diagram (Revised) -->
+    <section class="slide" data-index="5">
+      <span class="slide-category">⏰ 動機曲線示意圖</span>
+      <h2 class="slide-title">時間動機理論 (TMT)：行動慾望的變化曲線</h2>
+      <p class="slide-subtitle">雙曲貼現模型：為什麼在學期初，打電動的吸引力總是遠遠壓過寫期末報告？</p>
+
+      <div class="svg-chart-card">
+        <!-- SVG Hand-drawn curve illustration -->
+        <svg viewBox="0 0 760 170" width="100%" style="max-height: 155px; font-family: inherit;">
+          <!-- Axes -->
+          <line x1="50" y1="140" x2="710" y2="140" stroke="#2d3748" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="50" y1="140" x2="50" y2="20" stroke="#2d3748" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Axis labels -->
+          <text x="35" y="18" fill="#2d3748" font-size="12" font-weight="800" text-anchor="middle">動力 (Utility)</text>
+          <text x="705" y="156" fill="#2d3748" font-size="12" font-weight="800" text-anchor="end">時間推進 ➔</text>
+          <text x="55" y="156" fill="#64748b" font-size="11" font-weight="700">學期開始 (90天前)</text>
+          <text x="470" y="156" fill="#64748b" font-size="11" font-weight="700">學期中</text>
+          <text x="670" y="156" fill="#e11d48" font-size="11" font-weight="900">截止日前夕 🎯</text>
+
+          <!-- Entertainment Curve (Flat/Gentle Decay) passing through (550, 75) -->
+          <path d="M 50 68 Q 365 70 680 78" fill="none" stroke="#f43f5e" stroke-width="3.5" stroke-dasharray="6,4"/>
+          <text x="140" y="58" fill="#e11d48" font-size="12" font-weight="800">🎮 即刻娛樂/社交 (延遲 D ≈ 0，效用始終平穩)</text>
+
+          <!-- Study/Report Curve (Hyperbolic rise) passing through (550, 75) with continuous tangent -->
+          <path d="M 50 132 C 380 132 500 115 550 75 C 590 43 630 28 670 25" fill="none" stroke="#0284c7" stroke-width="4"/>
+          <text x="280" y="122" fill="#0369a1" font-size="12" font-weight="800">📝 寫報告/讀書 (延遲 D 隨截止日臨近而急劇縮短)</text>
+
+          <!-- Preference Reversal Intersection Point (Exactly on intersection of both curves) -->
+          <circle cx="550" cy="75" r="6" fill="#ffd43b" stroke="#2d3748" stroke-width="2.5"/>
+          <text x="550" y="98" fill="#b45309" font-size="11" font-weight="900" text-anchor="middle">⚡ 偏好逆轉點 (開始想動筆！)</text>
+
+          <!-- Deadline rush zone -->
+          <rect x="575" y="22" width="100" height="118" fill="rgba(255, 212, 59, 0.18)" stroke="#f59f00" stroke-width="1.5" stroke-dasharray="4,3" rx="6"/>
+          <text x="625" y="42" fill="#b45309" font-size="10" font-weight="800" text-anchor="middle">🔥 突擊趕工區</text>
+        </svg>
+        <div class="chart-caption">※ 本圖為依據時間動機理論繪製之概念曲線示意圖，用於說明雙曲貼現趨勢，非真實受試者實驗量測數值（Steel & König, 2006）。</div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 0.1rem;">
+        <div class="card card-accent-blue" style="padding: 0.75rem 1rem;">
+          <div class="card-title">📖 理論公式補充</div>
+          <p class="card-text" style="font-family: monospace; font-size: 0.85rem; color: #0369a1; font-weight: 700;">
+            行動效用 (Utility) ≈ (期望 E × 價值 V) / (常數 Z + 衝動 Γ × 延遲 D)
+          </p>
+        </div>
+        <div class="card card-accent-green" style="padding: 0.75rem 1rem;">
+          <div class="card-title">💡 曲線的生活啟示</div>
+          <p class="card-text" style="font-size: 0.84rem;">
+            學期初不是你缺乏責任感，而是「遙遠的延遲」使大腦主觀價值被大幅打折；唯有把大任務拆成<strong>近期的微小檢核點</strong>，才能把動力曲線提前拉升！
+          </p>
+        </div>
+      </div>
+      <div class="source-tag">📚 理論模型：時間動機理論 (Temporal Motivation Theory, Steel & König, 2006)</div>
+    </section>
+
+    <!-- Slide 6: Emotional Cycle Loop with Connecting Arrows (Revised) -->
+    <section class="slide" data-index="6">
+      <span class="slide-category">💭 心情與拖延循環</span>
+      <h2 class="slide-title">情緒逃避循環：為什麼心情差時更想拖？</h2>
+      <p class="slide-subtitle">Sirois & Pychyl (2013)：拖延的核心是「短期情緒修復（Giving in to feel good）」。</p>
+
+      <div class="cycle-wrapper">
+        <div class="cycle-flow">
+          <div class="cycle-step" style="background: var(--pastel-yellow);">
+            <div class="cycle-num">1</div>
+            <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.2rem;">面對棘手任務</div>
+            <p style="font-size: 0.8rem; color: #475569;">題目模糊、困難或枯燥，引發無聊或挫折感。</p>
+          </div>
+          <span class="cycle-arrow">➔</span>
+          <div class="cycle-step" style="background: var(--pastel-pink);">
+            <div class="cycle-num" style="background: #ff6b6b; color: #fff;">2</div>
+            <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.2rem;">啟動情緒避難</div>
+            <p style="font-size: 0.8rem; color: #475569;">急於擺脫負面情緒，大腦優先選擇「即刻修復心情（Giving in to feel good）」！</p>
+          </div>
+          <span class="cycle-arrow">➔</span>
+          <div class="cycle-step" style="background: var(--pastel-purple);">
+            <div class="cycle-num" style="background: #845ef7; color: #fff;">3</div>
+            <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.2rem;">轉移與即時緩解</div>
+            <p style="font-size: 0.8rem; color: #475569;">轉去滑手機，負面感受瞬間解除，加深逃避路徑。</p>
+          </div>
+          <span class="cycle-arrow">➔</span>
+          <div class="cycle-step" style="background: var(--pastel-green);">
+            <div class="cycle-num" style="background: #40c057; color: #fff;">4</div>
+            <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.2rem;">包袱甩給未來</div>
+            <p style="font-size: 0.8rem; color: #475569;">「明天再說！」把爛攤子推給未來的自己，事後湧現自責。</p>
+          </div>
+        </div>
+
+        <div class="cycle-loop-back">
+          <span>↩</span>
+          <span>任務並未消失，截止日更近造成下一次壓力更大，再次觸發逃避 ➔ <strong>形成周而復始的惡性循環</strong></span>
+        </div>
+      </div>
+
+      <div class="card card-accent-rose" style="padding: 0.8rem 1.1rem;">
+        <p class="card-text">
+          🔄 <strong>循環固化的心理陷阱</strong>：逃避帶來了「短暫的心情好轉」，這種即刻獎勵讓大腦誤以為逃避是有效的減壓工具；然而，逃避只是把負擔轉嫁給未來的自己，最終代價依然得由未來的自己買單。
+        </p>
+      </div>
+      <div class="source-tag">📚 理論依據：短期情緒調節與當下／未來自我模型 (Sirois & Pychyl, 2013)</div>
+    </section>
+
+    <!-- Slide 7: Interactive Scenario Analysis -->
+    <section class="slide" data-index="7">
+      <span class="slide-category">🧩 自我探索小情境</span>
+      <h2 class="slide-title">【情境分析】看看你的大腦在哪個環節卡住了？</h2>
+      <p class="slide-subtitle">點選平時最常出現在你腦海的獨白，展開心理機制與因應方向：</p>
+
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="showScenarioAnalysis('A', this)">
+          <span>☕ 情境 A：「這份報告題目太龐大，我連第一頁要寫什麼都沒頭緒，好煩。」</span>
+          <span style="color: #0284c7; font-size: 0.85rem; font-weight: 800;">展開情境分析 ➔</span>
+        </button>
+        <button class="scenario-btn" onclick="showScenarioAnalysis('B', this)">
+          <span>🎮 情境 B：「截止日還有三星期，現在寫太早了，朋友約打遊戲先去一下。」</span>
+          <span style="color: #0284c7; font-size: 0.85rem; font-weight: 800;">展開情境分析 ➔</span>
+        </button>
+        <button class="scenario-btn" onclick="showScenarioAnalysis('C', this)">
+          <span>🧹 情境 C：「好不容易坐下來，突然覺得桌子太亂非整理不可，不然讀不下去。」</span>
+          <span style="color: #0284c7; font-size: 0.85rem; font-weight: 800;">展開情境分析 ➔</span>
+        </button>
+      </div>
+
+      <div class="scenario-feedback" id="scenarioFeedbackBox">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="source-tag">📚 理論依據：時間動機理論（TMT）與情緒修復假說之校園情境實例</div>
+    </section>
+
+    <!-- Slide 8: Health Research (Conservative & Strictly Grounded) -->
+    <section class="slide" data-index="8">
+      <span class="slide-category">🩺 身體與心靈的對話</span>
+      <h2 class="slide-title">拖延與身心健康：長期研究帶來哪些啟示？</h2>
+      <p class="slide-subtitle">客觀解讀縱貫追蹤發現，嚴格依據論文實證，不擴大推論。</p>
+
+      <div class="grid-2">
+        <div class="card card-accent-blue">
+          <div class="card-title">📈 縱貫追蹤的統計預測發現</div>
+          <p class="card-text">
+            一項針對 392 位大學生的一年三波追蹤研究（Jochmann et al., 2024）顯示：在自迴歸面版模型控制下，初期特質拖延可跨時間顯著預測一年後的<strong>憂鬱與焦慮症狀（β = 0.16, p < .001）</strong>。<br>
+            <span style="font-size: 0.8rem; color: #64748b;">※ 論文客觀提醒：此研究屬於觀察性縱貫面版分析而非隨機對照實驗，應理解為長程統計關聯，不能直接等同於已證實的單向因果關係。</span>
+          </p>
+        </div>
+
+        <div class="card card-accent-amber">
+          <div class="card-title">⚠️ 知覺壓力（Perceived Stress）的中介檢驗</div>
+          <p class="card-text">
+            傳統「拖延—健康模型（Procrastination-Health Model）」假定拖延透過慢性知覺壓力導致疾病。但在該項研究中，知覺壓力在 6 個月與 12 個月追蹤間<strong>未呈現統計上的顯著中介效果</strong>。<br>
+            <strong>論文保守解釋</strong>：作者指出這可能反映學生考前壓力多屬於隨學期結束而緩解的短期急性壓力；拖延與長期心理健康之間的傳導機制仍需未來研究進一步檢驗。
+          </p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 0.1rem; background: var(--pastel-yellow); padding: 0.75rem 1.1rem;">
+        <p class="card-text" style="font-size: 0.85rem; font-weight: 600;">
+          ⚖️ <strong>科學求真態度</strong>：統合分析顯示拖延與較低的學業表現存在穩定負相關（GPA 相關 ρ = -0.21，Steel, 2007），並伴隨長期的情緒負擔，但我們應依據實證客觀理解，避免災難化推論。
+        </p>
+      </div>
+      <div class="source-tag">📚 文獻來源：Jochmann et al. (2024) BMC Psychology；拖延—健康模型實證檢驗</div>
+    </section>
+
+    <!-- Slide 9: Intervention Studies Percentages Explained -->
+    <section class="slide" data-index="9">
+      <span class="slide-category">🎒 學校輔導現況觀察</span>
+      <h2 class="slide-title">教育介入現況：我們都在用什麼方法改善？</h2>
+      <p class="slide-subtitle">Salguero-Pazos & Reyes-de-Cózar (2023)：十年 32 篇課堂介入研究的分佈統計。</p>
+
+      <div class="grid-3">
+        <div class="card card-accent-blue">
+          <div class="highlight-stat">90.6%</div>
+          <div class="stat-label">探討「自我調節」（29/32 篇）的研究比例</div>
+          <p class="card-text" style="margin-top: 0.35rem; font-size: 0.84rem;">絕大多數介入方案著重於時間管理、排定計畫、SMART 目標等自我調節策略。</p>
+        </div>
+        <div class="card card-accent-amber">
+          <div class="highlight-stat">28.1%</div>
+          <div class="stat-label">探討「自我效能」（9/32 篇）的研究比例</div>
+          <p class="card-text" style="margin-top: 0.35rem; font-size: 0.84rem;">部分方案包含元認知思考與反思訓練，幫助學生提升學業勝任信心。</p>
+        </div>
+        <div class="card card-accent-rose">
+          <div class="highlight-stat">3.1%</div>
+          <div class="stat-label">直接聚焦「焦慮應對」（僅 1/32 篇）</div>
+          <p class="card-text" style="margin-top: 0.35rem; font-size: 0.84rem;">32 項研究中只有 1 篇將焦慮列為主要介入維度，情緒面向研究相對稀少。</p>
+        </div>
+      </div>
+
+      <div class="card card-accent-green" style="margin-top: 0.25rem; padding: 0.75rem 1.1rem;">
+        <p class="card-text">
+          ⚠️ <strong>關鍵觀念澄清（非有效率！）</strong>：上述百分比代表<strong>「學術界在設計介入方案時納入該維度的研究篇數比例」</strong>，絕非表示時間管理的成功率是 90.6%！這項數據反而凸顯出：學校目前多在訓練排程，卻較少教導如何面對焦慮與情緒調適。
+        </p>
+      </div>
+      <div class="source-tag">📚 文獻來源：Salguero-Pazos & Reyes-de-Cózar (2023) IJER (表4 介入維度統計)</div>
+    </section>
+
+    <!-- Slide 10: Supported Strategies vs. Practical Tips (Refined) -->
+    <section class="slide" data-index="10">
+      <span class="slide-category">🌱 溫柔有效的自救工具箱</span>
+      <h2 class="slide-title">科學自救雙軌：實證策略與生活應用</h2>
+      <p class="slide-subtitle">清楚區分「文獻回顧歸納之策略」與「根據理論提出之生活應用建議」。</p>
+
+      <div class="grid-2">
+        <div class="card card-accent-blue">
+          <div class="card-title">🔬 文獻回顧歸納之介入策略</div>
+          <p class="card-text">
+            • <strong>次目標拆解（Proximal Subgoals）</strong>：Steel (2007) 在統合分析與文獻回顧中指出，將大任務拆成近期具體目標，有助於縮短感知延遲；Salguero-Pazos 等人 (2023) 回顧亦顯示自我調節是最多介入採用的方向。<br>
+            • <strong>情境刺激控制（Stimulus Control）</strong>：Steel (2007) 回顧指出，透過固定工作場所與移除誘惑線索（如手機置於視線外），能降低對衝動性的考驗。
+          </p>
+        </div>
+
+        <div class="card card-accent-green">
+          <div class="card-title">💡 依據理論模型提出之生活因應建議</div>
+          <p class="card-text">
+            • <strong>降低起始門檻（微步嘗試）</strong>：依據情緒調節理論，允許自己「只要打開文件寫3行就好」，降低面對未知大任務的初始厭惡感（Task Aversiveness）。<br>
+            • <strong>自我同情（Self-Compassion）</strong>：依據 Sirois & Pychyl (2013) 的概念論述，接納過去的推遲並停止過度自責，有助於減輕負向內疚，打破後續的情緒逃避循環。
+          </p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 0.1rem; background: var(--pastel-yellow); padding: 0.65rem 1.1rem;">
+        <p class="card-text" style="font-size: 0.85rem; font-weight: 700;">
+          🎯 <strong>整合心法</strong>：先透過「情境控制」擋下誘惑，再用「次目標」減輕延遲與負擔，最後以「自我同情」安撫情緒，建立正向循環。
+        </p>
+      </div>
+      <div class="source-tag">📚 策略依據：學業拖延介入回顧與理論歸納 (Steel, 2007; Sirois & Pychyl, 2013; Salguero-Pazos et al., 2023)</div>
+    </section>
+
+    <!-- Slide 11: Summary & Micro-Action -->
+    <section class="slide" data-index="11">
+      <span class="slide-category">🎁 課後自我承諾</span>
+      <h2 class="slide-title">善待未來的自己，從一小步開始</h2>
+      <p class="slide-subtitle">理解自己的心理機制，就是改變的起點 🌸</p>
+
+      <div class="card card-accent-blue" style="padding: 1rem 1.1rem;">
+        <h3 style="color: #0284c7; margin-bottom: 0.4rem; font-size: 1.05rem; font-weight: 900;">📌 本次簡報三點核心回顧</h3>
+        <ul style="line-height: 1.7; padding-left: 1.2rem; font-size: 0.88rem; color: #334155;">
+          <li><strong>理性看待</strong>：拖延是大腦對時間延遲的雙曲折扣與當下情緒避難的共同結果，並非道德瑕疵。</li>
+          <li><strong>雙軌並行</strong>：除了練習排定具體次目標，更要關照面對困難時的負面感受，停止苛責自己。</li>
+          <li><strong>環境先於意志力</strong>：與其辛苦對抗手機誘惑，不如主動營造專注的物理空間。</li>
+        </ul>
+      </div>
+
+      <div class="card card-accent-green" style="background: var(--pastel-green); text-align: center; margin-top: 0.2rem; padding: 0.8rem 1rem;">
+        <div style="font-weight: 900; color: #15803d; font-size: 0.98rem; margin-bottom: 0.2rem;">
+          ✨ 課後 3 分鐘微行動 ✨
+        </div>
+        <p class="card-text" style="font-size: 0.86rem; font-weight: 600;">
+          挑一件你目前最想逃避的作業或代辦事項，<br>
+          <strong>不求做完，只做「隨便寫兩句」或「查一篇資料」的最微小動作</strong>，現在就動手試試！
+        </p>
+      </div>
+      <div class="source-tag">拖延症自救研究所 • 依據 LLM Wiki 五篇學術文獻核實完成</div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <footer>
+    <div class="keyboard-hint">
+      提示：可用鍵盤方向鍵 <span class="kbd">←</span> <span class="kbd">→</span> 或空白鍵翻頁 ⌨️
+    </div>
+    <div class="nav-btn-group">
+      <button class="btn" id="prevBtn" onclick="changeSlide(-1)" disabled>
+        <span>← 上一頁</span>
+      </button>
+      <button class="btn btn-primary" id="nextBtn" onclick="changeSlide(1)">
+        <span>下一頁 →</span>
+      </button>
+    </div>
+  </footer>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 11;
+
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counter = document.getElementById('slideCounter');
+    const progressBar = document.getElementById('progressBar');
+
+    function updateSlide() {
+      slides.forEach((slide) => {
+        const index = parseInt(slide.getAttribute('data-index'), 10);
+        slide.classList.toggle('active', index === currentSlide);
+      });
+
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+      nextBtn.textContent = currentSlide === totalSlides ? '完成閱讀 🎉' : '下一頁 →';
+
+      counter.textContent = `Slide ${currentSlide} / ${totalSlides}`;
+      progressBar.style.width = `${((currentSlide - 1) / (totalSlides - 1)) * 100}%`;
+    }
+
+    function changeSlide(direction) {
+      const target = currentSlide + direction;
+      if (target >= 1 && target <= totalSlides) {
+        currentSlide = target;
+        updateSlide();
+      }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        changeSlide(1);
+      } else if (e.key === 'ArrowLeft') {
+        changeSlide(-1);
+      }
+    });
+
+    // Interactive Scenario Analysis
+    function showScenarioAnalysis(type, btnElement) {
+      const box = document.getElementById('scenarioFeedbackBox');
+      box.style.display = 'block';
+
+      // Highlight active button
+      document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+      if (btnElement) {
+        btnElement.classList.add('active');
+      }
+
+      if (type === 'A') {
+        box.innerHTML = `
+          <strong>💡 情境分析：任務厭惡感與勝任信心不足（Task Aversiveness & Self-Efficacy）</strong><br>
+          • <strong>心理機制</strong>：當作業目標缺乏具體架構時，容易激發未知的無力感，引發大腦的情緒逃避反應（Sirois & Pychyl, 2013）。<br>
+          • <strong>因應嘗試</strong>：將「寫完整篇」拆解為極小的次目標，例如「只列出 3 個可能參考的標題」，降低門檻以累積初始效能感。
+        `;
+      } else if (type === 'B') {
+        box.innerHTML = `
+          <strong>💡 情境分析：時間折現與衝動性拉扯（Temporal Discounting & Impulsiveness）</strong><br>
+          • <strong>心理機制</strong>：距離截止日還遠時，長遠回報在主觀上遭受大幅折現；而朋友邀約或遊戲的獎勵延遲幾乎為零（Steel & König, 2006）。<br>
+          • <strong>因應嘗試</strong>：設立階段性檢核點，或與同學約定固定的讀書時間，人為提前感知回饋。
+        `;
+      } else if (type === 'C') {
+        box.innerHTML = `
+          <strong>💡 情境分析：藉次要雜務逃避主任務（Stimulus Cues & Structured Delay）</strong><br>
+          • <strong>心理機制</strong>：大腦試圖透過打掃等容易完成的小事來獲得「微小成就感」，藉此舒緩面對真正挑戰時的不適。<br>
+          • <strong>因應嘗試</strong>：實施刺激控制（Stimulus Control），清空視線內的雜物或換到圖書館單純環境，減少誘發次要任務的線索。
+        `;
+      }
+    }
+
+    // Initialize
+    updateSlide();
+  </script>
+</body>
+</html>
